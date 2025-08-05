@@ -1,0 +1,97 @@
+require 'yaml'
+
+begin
+  # Load the configuration file
+  yaml_config = YAML.load_file("config.yaml")
+rescue => e
+  puts "Error loading config.yaml: #{e.message}"
+  exit 1
+end
+
+n =  yaml_config["node_count"].to_i
+NODES = []
+
+# Create an array of nodes based on the node count from the config file
+(1..n).each do |i|
+  NODES << {
+    :hostname =>  yaml_config["host_prefix"] + i.to_s,
+    :ip => yaml_config["ip_prefix"] + i.to_s
+  }
+end
+
+# Read and store common configuration file for provisioning the nodes
+common_config_file = yaml_config["common_customization_config"]
+if File.exist?(common_config_file)
+  puts "Found common provisioning config: #{common_config_file}"
+  common_config_file_content =  File.read(common_config_file)
+else
+  puts "Common provisioning config not found: #{common_config_file}."
+  common_config_file_content = "echo 'Common provisioning config not found.'"
+end
+
+# Read and store common provisioning files for the nodes concatenated with the common configuration file content
+common_provision_file = yaml_config["common_customization_script"]
+if File.exist?(common_provision_file)
+  puts "Found common provisioning script: #{common_provision_file}"
+  common_provision_file_content =  common_config_file_content + "\n" + File.read(common_provision_file)
+else
+  puts "Common provisioning script not found: #{common_provision_file}."
+  common_provision_file_content = "echo 'Common provisioning script not found.'"
+end
+
+# Read and store custom configuration files for provisioning the nodes
+config_file = yaml_config["customization_config"]
+if File.exist?(config_file)
+  puts "Found custom provisioning config: #{config_file}"
+  config_file_content =  File.read(config_file)
+else
+  puts "Custom provisioning config not found: #{config_file}."
+  config_file_content = "echo 'Custom provisioning config not found.'"
+end
+
+# Read and store custom provisioning files for the nodes concatenated with the configuration file content
+provision_file = yaml_config["customization_script"]
+if File.exist?(provision_file)
+  puts "Found custom provisioning script: #{provision_file}"
+  provision_file_content =  config_file + "\n" + File.read(provision_file)
+else
+  puts "Custom provisioning script not found: #{provision_file}."
+  provision_file_content = "echo 'Custom provisioning script not found.'"
+end
+
+Vagrant.configure("2") do |config|
+  NODES.each do |node|
+    config.vm.define node[:hostname] do |server|
+
+      # Set the hostname of each node
+      server.vm.hostname = node[:hostname]
+
+      # Configure VirtualBox settings for each VM
+      server.vm.provider :virtualbox do |vb|
+        vb.name    = node[:hostname]
+        vb.memory = yaml_config["ram_size"].to_i
+        vb.cpus = yaml_config["cpu_count"].to_i
+      end
+
+      # Set the base box and network settings for each VM
+      server.vm.box = yaml_config["vm_box"]
+      server.vm.hostname = node[:hostname]
+      server.vm.network yaml_config["network_type"], ip: node[:ip]
+
+      # Configure shared folders between the host and guest VMs
+      server.vm.synced_folder yaml_config["SHARED_LOCAL_point"], yaml_config["SHARED_mount_point"]
+
+      # Provision the VM with the following shell commands:
+      server.vm.provision "shell", inline: "sed -i 's/^PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config"
+      server.vm.provision "shell", inline: "echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config"
+      server.vm.provision "shell", inline: "systemctl reload sshd"
+      server.vm.provision "shell", inline: "echo -e " + "\"" + yaml_config["root_password"] + "\n" + yaml_config["root_password"] + "\"" + " | passwd root"
+
+      # Execute common provisioning commands
+      server.vm.provision "shell", inline: common_provision_file_content
+
+      # Execute custom provisioning commands
+      server.vm.provision "shell", inline: provision_file_content
+    end
+  end
+end
