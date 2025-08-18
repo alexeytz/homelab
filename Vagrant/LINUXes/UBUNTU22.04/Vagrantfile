@@ -53,7 +53,7 @@ end
 provision_file = yaml_config["customization_script"]
 if File.exist?(provision_file)
   puts "Found custom provisioning script: #{provision_file}"
-  provision_file_content =  config_file_content + "\n" + File.read(provision_file)
+  provision_file_content =  config_file + "\n" + File.read(provision_file)
 else
   puts "Custom provisioning script not found: #{provision_file}."
   provision_file_content = "echo 'Custom provisioning script not found.'"
