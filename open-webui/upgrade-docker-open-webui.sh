@@ -1,4 +1,7 @@
 #!/bin/bash
+test "$1" = '' && echo "Execution is: $0 <IP to OLLAMA host>"
+test "$1" = '' && exit 1
+
 echo "Upgrading Open WebUI..." && \
 echo "Stopping Open WebUI..." && \
 docker stop open-webui && \
@@ -13,7 +16,7 @@ docker rmi ghcr.io/open-webui/open-webui:main && \
 echo "Pulling Open WebUI image main..." && \
 docker pull ghcr.io/open-webui/open-webui:main && \
 echo "Starting Open WebUI..." && \
-docker run -d -p 3000:8080 -e OLLAMA_BASE_URL=http://192.168.69.11:11434 -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main && \
+docker run -d -p 3000:8080 -e OLLAMA_BASE_URL=http://$1:11434 -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main && \
 sleep 2 && \
 echo "Open WebUI is running..." && \
 echo "Following are the logs of Open WebUI. Press CTRL+C to stop logging and exit from this terminal session." && \
