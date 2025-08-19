@@ -13,18 +13,19 @@ source $1
 hostname -I|grep $controlPLANE_IP;hostname_result=$?
 #echo $hostname_result
 test $hostname_result -eq 0 && echo " . . Control Plane node. Continue..." || \
-echo " . . You shall not run this script on the non Control Plane nodes. Exiting."
+msg error " . . You shall not run this script on the non Control Plane nodes. Exiting."
+test $hostname_result -eq 0 || exit 0
 
 msg info "Running: kubeadm config images pull."
-kubeadm config images pull --kubernetes-version stable-1.29
+kubeadm config images pull --kubernetes-version stable-${k8Version}
 
 # Set the --node-ip argument for kubelet
 touch /etc/sysconfig/kubelet
 echo "KUBELET_EXTRA_ARGS=--node-ip=$controlPLANE_IP" > /etc/sysconfig/kubelet
 systemctl enable kubelet
 
-msg info "Apply: kubeadm init --kubernetes-version stable-1.29 --token $k8Token --apiserver-advertise-address $controlPLANE_IP --apiserver-bind-port $controlPLANE_PORT --pod-network-cidr=$podNETWORKcidr"
-kubeadm init --kubernetes-version stable-1.29 --token $k8Token --apiserver-advertise-address $controlPLANE_IP --apiserver-bind-port $controlPLANE_PORT --pod-network-cidr=$podNETWORKcidr
+msg info "Apply: kubeadm init --kubernetes-version stable-${k8Version} --token $k8Token --apiserver-advertise-address $controlPLANE_IP --apiserver-bind-port $controlPLANE_PORT --pod-network-cidr=$podNETWORKcidr"
+kubeadm init --kubernetes-version stable-${k8Version} --token $k8Token --apiserver-advertise-address $controlPLANE_IP --apiserver-bind-port $controlPLANE_PORT --pod-network-cidr=$podNETWORKcidr
 
 # Copy the kube config file to home directories
 mkdir -p /root/.kube
@@ -37,7 +38,7 @@ echo "alias kc=kubectl" >> /root/.bashrc
 echo 'source <(kubectl completion bash)' >>/root/.bashrc
 echo 'complete -o default -F __start_kubectl kc' >> /root/.bashrc
 echo 'complete -o default -F __start_kubectl oc' >> /root/.bashrc
-echo " [+] $(date) Set aliases and TAB completion... Done."
+msg info "Set aliases and TAB completion. Done."
 
 #https://github.com/kubernetes-sigs/cri-tools/issues/153
 msg info "Apply: crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock --set image-endpoint=unix:///run/containerd/containerd.sock (https://github.com/kubernetes-sigs/cri-tools/issues/153)"
