@@ -2,7 +2,7 @@
 host_prefix: l-k8-8x-n
 
 # IP prefix for VMs in Vagrantfile
-ip_prefix: 192.168.69.8
+ip_prefix: 192.168.69.18
 
 # The box used to create VM nodes (CentOS 8 in this case)
 vm_box: "LRH8"
