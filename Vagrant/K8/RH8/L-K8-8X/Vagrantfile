@@ -80,7 +80,7 @@ Vagrant.configure("2") do |config|
 
       # Configure shared folders between the host and guest VMs
       server.vm.synced_folder yaml_config["SHARED_LOCAL_point"], yaml_config["SHARED_mount_point"]
-      server.vm.synced_folder "../../../../../homelab", "/homelab"
+      #server.vm.synced_folder "../../../../../homelab", "/homelab"
 
       # Provision the VM with the following shell commands:
       server.vm.provision "shell", inline: "sed -i 's/^PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config"

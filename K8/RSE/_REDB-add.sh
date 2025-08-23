@@ -1,35 +1,39 @@
 #!/bin/bash
 
 # This script adds a Redis Enterprise Database to a namespace with specified version bundle folder.
-echo "Starting $0."
 
 # Check if the first argument (namespace) is provided.
-test "$1" = '' && echo "Execution is: ./_REDB-add.sh <NAMESPACE> <VERSION-BUNDLE-FOLDER>";
+test "$1" = '' && echo "Execution is: ./_REDB-add.sh <Config (RSE_config.sh)> <VERSION-BUNDLE-FOLDER>";
 test "$1" = '' && exit 1;
-
 # Check if the second argument (version-bundle-folder) is provided.
-test "$2" = '' && echo "Execution is: ./_REDB-add.sh <NAMESPACE> <VERSION-BUNDLE-FOLDER>";
+test "$2" = '' && echo "Execution is: ./_REDB-add.sh <Config (RSE_config.sh)> <VERSION-BUNDLE-FOLDER>";
 test "$2" = '' && exit 1;
 
+source $1
+
+BUNDLE_NAME=$2
+
+echo "Starting $0."
+
 # Get modules version for Redis Enterprise Cluster.
-ReJSON_version=$(kubectl describe rec -n $1 $1-rec|grep -A 2 ReJSON|tail -1|tr -d ' ')
-search_version=$(kubectl describe rec -n $1 $1-rec|grep -A 2 search|tail -1|tr -d ' ')
+ReJSON_version=$(kubectl describe rec -n $NAMESPACE $REC_NAME|grep -A 2 ReJSON|tail -1|tr -d ' ')
+search_version=$(kubectl describe rec -n $NAMESPACE $REC_NAME|grep -A 2 search|tail -1|tr -d ' ')
 
 # Output the path to the generated Redis Enterprise Database YAML file.
-echo " [+] Create ./$2/$1-enterprise-database.yaml"
+echo " [+] Create ./$BUNDLE_NAME/$DEFAULT_DB_NAME.yaml"
 
 # Generate and save the Redis Enterprise Database YAML file.
-cat <<EOF | tee ./$2/$1-enterprise-database.yaml
+cat <<EOF | tee ./$BUNDLE_NAME/$DEFAULT_DB_NAME.yaml
 apiVersion: app.redislabs.com/v1alpha1
 kind: RedisEnterpriseDatabase
 metadata:
-  name: $1-enterprise-database
+  name: $DEFAULT_DB_NAME
 spec:
   memorySize: 100MB
   tlsMode: enabled
   redisEnterpriseCluster:
-    name: $1-rec
-  databasePort: 10001
+    name: $REC_NAME
+  databasePort: $DEFAULT_DB_PORT
   replication: true
   memorySize: 250MB
   modulesList:
@@ -41,11 +45,11 @@ spec:
 EOF
 
 # Apply the generated Redis Enterprise Database YAML file using kubectl.
-echo " [+] Running: kubectl apply -n $1 -f ./$2/$1-enterprise-database.yaml" && \
-kubectl apply -n $1 -f ./$2/$1-enterprise-database.yaml
+echo " [+] Running: kubectl apply -n $NAMESPACE -f ./$BUNDLE_NAME/$DEFAULT_DB_NAME.yaml" && \
+kubectl apply -n $NAMESPACE -f ./$BUNDLE_NAME/$DEFAULT_DB_NAME.yaml
 
 # Inform user how to delete the created Redis Enterprise Database.
-echo " [+] To delete DB $1-enterprise-database, use: kubectl delete redb $1-enterprise-database -n $1"
+echo " [+] To delete DB $DEFAULT_DB_NAME, use: kubectl delete redb $DEFAULT_DB_NAME -n $NAMESPACE"
 
 # Signal completion of script execution.
 echo "$0 done."

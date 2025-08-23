@@ -5,13 +5,13 @@ host_prefix: l-k8-8x-n
 ip_prefix: 192.168.69.18
 
 # The box used to create VM nodes (CentOS 8 in this case)
-vm_box: "LRH8"
+vm_box: "generic/centos8s"
 
 # Mount point of the shared directory within each VM
-SHARED_mount_point: /vagrant
+SHARED_mount_point: /homelab
 
 # Local path for the shared folder on your machine
-SHARED_LOCAL_point: ../../SHARED
+SHARED_LOCAL_point: ../../../../../homelab
 
 # Type of network (public is used in this case)
 network_type: public_network
