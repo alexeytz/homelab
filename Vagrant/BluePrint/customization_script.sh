@@ -1,0 +1,1 @@
+echo "echo from customization_script.sh, $ECHOHELLO"

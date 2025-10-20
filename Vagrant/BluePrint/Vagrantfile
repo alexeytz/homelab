@@ -21,7 +21,7 @@ end
 
 # Read and store common configuration file for provisioning the nodes
 common_config_file = yaml_config["common_customization_config"]
-if File.exist?(common_config_file)
+if common_config_file != nil && File.exist?(common_config_file)
   puts "Found common provisioning config: #{common_config_file}"
   common_config_file_content =  File.read(common_config_file)
 else
@@ -31,7 +31,7 @@ end
 
 # Read and store common provisioning files for the nodes concatenated with the common configuration file content
 common_provision_file = yaml_config["common_customization_script"]
-if File.exist?(common_provision_file)
+if common_provision_file != nil && File.exist?(common_provision_file)
   puts "Found common provisioning script: #{common_provision_file}"
   common_provision_file_content =  common_config_file_content + "\n" + File.read(common_provision_file)
 else
@@ -41,7 +41,7 @@ end
 
 # Read and store custom configuration files for provisioning the nodes
 config_file = yaml_config["customization_config"]
-if File.exist?(config_file)
+if config_file != nil && File.exist?(config_file)
   puts "Found custom provisioning config: #{config_file}"
   config_file_content =  File.read(config_file)
 else
@@ -51,9 +51,9 @@ end
 
 # Read and store custom provisioning files for the nodes concatenated with the configuration file content
 provision_file = yaml_config["customization_script"]
-if File.exist?(provision_file)
+if provision_file != nil && File.exist?(provision_file)
   puts "Found custom provisioning script: #{provision_file}"
-  provision_file_content =  config_file + "\n" + File.read(provision_file)
+  provision_file_content =  config_file_content + "\n" + File.read(provision_file)
 else
   puts "Custom provisioning script not found: #{provision_file}."
   provision_file_content = "echo 'Custom provisioning script not found.'"
@@ -82,9 +82,11 @@ Vagrant.configure("2") do |config|
       server.vm.synced_folder yaml_config["SHARED_LOCAL_point"], yaml_config["SHARED_mount_point"]
 
       # Provision the VM with the following shell commands:
-      server.vm.provision "shell", inline: "sed -i 's/^PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config"
+      server.vm.provision "shell", inline: "sed -i 's/^.*PasswordAuthentication.*/PasswordAuthentication yes/g' /etc/ssh/sshd_config"
+      server.vm.provision "shell", inline: "sed -i 's/^.*KbdInteractiveAuthentication.*/KbdInteractiveAuthentication yes/g' /etc/ssh/sshd_config"
       server.vm.provision "shell", inline: "echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config"
-      server.vm.provision "shell", inline: "systemctl reload sshd"
+      # rc-service sshd restart - for alpine Linux.
+      server.vm.provision "shell", inline: "systemctl reload sshd||rc-service sshd restart"
       server.vm.provision "shell", inline: "echo -e " + "\"" + yaml_config["root_password"] + "\n" + yaml_config["root_password"] + "\"" + " | passwd root"
 
       # Execute common provisioning commands

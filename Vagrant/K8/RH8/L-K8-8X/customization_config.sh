@@ -1,1 +1,0 @@
-export CUSTOMIZATIONCONFIG="customization_config.sh"

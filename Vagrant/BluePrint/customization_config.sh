@@ -1,0 +1,1 @@
+export ECHOHELLO="This variable has been set in the customization_config.sh"

@@ -1,0 +1,1 @@
+export BASEURL="http://vault.centos.org"

@@ -1,38 +1,38 @@
 # Host prefix for VMs
-host_prefix: k8-9x-n
+host_prefix: bp-n
 
 # IP prefix for VMs in Vagrantfile
-ip_prefix: 192.168.69.9
+ip_prefix: 192.168.69.
 
-# The box used to create VM nodes (CentOS 9 in this case)
-vm_box: "generic/centos9s"
+# The box used to create VM nodes (CentOS 8 in this case)
+vm_box: "any"
 
 # Mount point of the shared directory within each VM
-SHARED_mount_point: /vagrant
+SHARED_mount_point: /mount_point
 
 # Local path for the shared folder on your machine
-SHARED_LOCAL_point: ../../SHARED
+SHARED_LOCAL_point: ../FOLDER
 
 # Type of network (public is used in this case)
-network_type: public_network
+network_type: private_network
 
 # Amount of RAM allocated to each VM, in megabytes
-ram_size: 8192
+ram_size: 1024
 
 # Number of CPU cores allocated to each VM
-cpu_count: 8
+cpu_count: 1
 
 # Total number of nodes to create
-node_count: 4
+node_count: 1
 
 # Root password for accessing the VMs (it's a good idea to secure your VMs with strong passwords)
-root_password: root@123
+root_password: root@bp
 
 # Config used to customize each VM as per environment needs.
-common_customization_config: ../../../COMMON/RHx-common-config.sh
+common_customization_config: ../COMMON/bp-common-config.sh
 
 # Script used to customize each VM as per environment needs.
-common_customization_script: ../../../COMMON/RHx-common.sh
+common_customization_script: ../COMMON/bp-common-script.sh
 
 # Config used to customize each VM after it is created.
 customization_config: customization_config.sh

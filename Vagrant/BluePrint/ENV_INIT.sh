@@ -2,10 +2,9 @@
 #-/usr/bin/env bash
 # -------------------------------------------------------------
 #  • Ensures Vagrant is installed.
-#  • Makes sure a Vagrantfile exists (creates a minimal one if needed).
 #  • Detects if a VM is already defined for that Vagrantfile.
 #  • If a VM is present, checks for an “INIT” snapshot – takes it if absent.
-#  • If no VM exists, runs `vagrant up` to create it.
+#  • If no VM exists, runs `vagrant up` to create it followed by a snapshot.
 # -------------------------------------------------------------
 
 #set -euo pipefail
@@ -55,7 +54,6 @@ fi
 # -------------------------------------------------------------
 # 3. Detect existing VM
 # -------------------------------------------------------------
-# machine‑readable output makes it easy to detect a VM’s state
 STATUS=$(vagrant status --machine-readable 2>/dev/null || true)
 if [[ -z "$STATUS" ]]; then
     abort "Failed to query Vagrant status. Is the Vagrantfile valid?"
@@ -67,15 +65,15 @@ VM_STATE=$(echo "$STATUS" | grep -E '^[0-9]+,[[:print:]]+,state,' | tail -1 | cu
 if [[ -z "$VM_STATE" ]]; then
     # No VM defined – create it
     msg info "No existing VM found. Initializing the environment."
+    vagrant up && \
+    vagrant halt && \
+    vagrant snapshot save "$SNAPSHOT_NAME" && \
     vagrant up
-    msg info "Vagrant environment is now up. 1st."
-    msg info "Halting the VM before snapshot..."
-    vagrant halt
-    msg info "Taking snapshot '$SNAPSHOT_NAME'..."
-    vagrant snapshot save "$SNAPSHOT_NAME"
-    msg info "Starting the VM after snapshot..."
-    vagrant up
-    msg info "Vagrant environment is now up. 2nd."
+    if [ $? -ne 0 ]; then
+        abort "Something went wrong while running 'vagrant up/halt/snapshot' commands."
+        exit 1
+    fi
+       msg info "Vagrant environment is ready."
 else
     # VM already exists – report its state
     msg info "Existing VM detected. Current state: '$VM_STATE'."
