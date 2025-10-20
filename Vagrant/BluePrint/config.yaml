@@ -1,19 +1,19 @@
-# Host prefix for VMs
+# Host prefix for VMs. Hostnames assigned: bp-n1, bp-n2, etc
 host_prefix: bp-n
 
-# IP prefix for VMs in Vagrantfile
-ip_prefix: 192.168.69.
+# IP prefix for VMs in Vagrantfile, IPs assigned: 192.168.69.11, 192.168.69.12, etc
+ip_prefix: 192.168.69.1
 
-# The box used to create VM nodes (CentOS 8 in this case)
+# The box used to create VM nodes (See https://portal.cloud.hashicorp.com/vagrant/discover/generic/centos8s for example)
 vm_box: "any"
 
-# Mount point of the shared directory within each VM
+# Mount point of the shared directory within each VM (guest)
 SHARED_mount_point: /mount_point
 
-# Local path for the shared folder on your machine
+# Local path for the shared folder on your machine (host)
 SHARED_LOCAL_point: ../FOLDER
 
-# Type of network (public is used in this case)
+# Type of network (public_network/private_network)
 network_type: private_network
 
 # Amount of RAM allocated to each VM, in megabytes
@@ -28,14 +28,14 @@ node_count: 1
 # Root password for accessing the VMs (it's a good idea to secure your VMs with strong passwords)
 root_password: root@bp
 
-# Config used to customize each VM as per environment needs.
+# Config used to customize each VM as per environment needs. Optional.
 common_customization_config: ../COMMON/bp-common-config.sh
 
-# Script used to customize each VM as per environment needs.
+# Script used to customize each VM as per environment needs. Optional.
 common_customization_script: ../COMMON/bp-common-script.sh
 
-# Config used to customize each VM after it is created.
+# Config used to customize each VM after it is created. Optional.
 customization_config: customization_config.sh
 
-# Script used to customize each VM after it is created.
+# Script used to customize each VM after it is created. Optional.
 customization_script: customization_script.sh

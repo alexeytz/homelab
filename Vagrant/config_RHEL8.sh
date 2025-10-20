@@ -4,6 +4,7 @@ host_prefix=rh8-n
 
 # IP prefix for VMs in Vagrantfile
 ip_prefix=192.168.69.8
+#ip_prefix=192.168.45.1
 
 # The box used to create VM nodes (CentOS 8 in this case)
 vm_box="generic/centos8s"
@@ -16,6 +17,7 @@ SHARED_LOCAL_point="../SHARED"
 
 # Type of network (public is used in this case)
 network_type=public_network
+#network_type=private_network
 
 # Amount of RAM allocated to each VM, in megabytes
 ram_size=8192
@@ -24,7 +26,7 @@ ram_size=8192
 cpu_count=8
 
 # Total number of nodes to create
-node_count=2
+node_count=3
 
 # Root password for accessing the VMs (it's a good idea to secure your VMs with strong passwords)
 root_password="root@123"

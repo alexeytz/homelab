@@ -76,7 +76,15 @@ Vagrant.configure("2") do |config|
       # Set the base box and network settings for each VM
       server.vm.box = yaml_config["vm_box"]
       server.vm.hostname = node[:hostname]
-      server.vm.network yaml_config["network_type"], ip: node[:ip]
+      case yaml_config["network_type"]
+      when "public_network"
+        #leaving below here, just in case. In my tests vagrant (2.4.9) would pick an appropriate adabter based on IP subnet. 
+        #server.vm.network :public_network, ip: node[:ip], bridge: yaml_config["network_name"]
+        server.vm.network :public_network, ip: node[:ip]
+      when "private_network"
+        # Vagrant picks appropriate adapter based on subnet. Even though documentation suggests virtualbox__adapter should be used to set it for private.
+        server.vm.network :private_network, ip: node[:ip]
+      end
 
       # Configure shared folders between the host and guest VMs
       server.vm.synced_folder yaml_config["SHARED_LOCAL_point"], yaml_config["SHARED_mount_point"]

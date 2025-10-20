@@ -4,6 +4,7 @@ host_prefix=rh10-n
 
 # IP prefix for VMs in Vagrantfile
 ip_prefix=192.168.69.10
+#ip_prefix=192.168.45.1
 
 # The box used to create VM nodes (CentOS 8 in this case)
 vm_box="centos/stream10"
@@ -16,6 +17,7 @@ SHARED_LOCAL_point="../SHARED"
 
 # Type of network (public is used in this case)
 network_type=public_network
+#network_type=private_network
 
 # Amount of RAM allocated to each VM, in megabytes
 ram_size=8192
