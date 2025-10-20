@@ -5,6 +5,7 @@ These CREATE_ENV_config.sh and config_*.sh files are intent to automate the crea
 **Suggestion:**
 
 * If you're using Windows, consider disabling Hyper-V, as it can interfere with VirtualBox. To get a Bash shell on Windows, install MobaXterm (https://mobaxterm.mobatek.net/download.html ) or Git.
+* Youtube "How to" video: https://youtu.be/yBE_PNqfqmg
 
 ---
 
