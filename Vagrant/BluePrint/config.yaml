@@ -1,3 +1,4 @@
+---
 # Host prefix for VMs. Hostnames assigned: bp-n1, bp-n2, etc
 host_prefix: bp-n
 
@@ -5,7 +6,10 @@ host_prefix: bp-n
 ip_prefix: 192.168.69.1
 
 # The box used to create VM nodes (See https://portal.cloud.hashicorp.com/vagrant/discover/generic/centos8s for example)
-vm_box: "any"
+vm_box:
+  vmbox: centos/stream9
+  guest_additions_installed: false
+  guest_additions_installation_script: ../COMMON/bp-guest_additions-script.sh
 
 # Mount point of the shared directory within each VM (guest)
 SHARED_mount_point: /mount_point
@@ -27,6 +31,12 @@ node_count: 1
 
 # Root password for accessing the VMs (it's a good idea to secure your VMs with strong passwords)
 root_password: root@bp
+
+# Config used to customize common environment needs. Optional.
+all_common_customization_config: ../COMMON/ALL-common-config.sh
+
+# Script used to customize common environment needs. Optional.
+all_common_customization_script: ../COMMON/ALL-common-script.sh
 
 # Config used to customize each VM as per environment needs. Optional.
 common_customization_config: ../COMMON/bp-common-config.sh

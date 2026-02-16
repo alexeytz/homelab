@@ -1,1 +1,1 @@
-export NAMESERVER="192.168.69.2"
+export ECHOHELLO="This variable has been set in the Ux-common-config.sh"

@@ -1,0 +1,1 @@
+export NAMESERVER="192.168.69.2"

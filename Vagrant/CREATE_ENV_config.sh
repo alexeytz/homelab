@@ -39,32 +39,36 @@ if [[ -z "$FORCE" && -d "./$ENV_NAME" ]]; then
 fi
 
 # Create a folder for the environment and copy content from BluePrint into it
-mkdir -p "$ENV_NAME" && cp -r "./BluePrint/"* "$ENV_NAME/"
+mkdir -p "$ENV_NAME" && cp -r "./BluePrint/"* "$ENV_NAME/" && cp "./BluePrint/config.yaml"  "$ENV_NAME/config.init.yaml"
 if [[ $? -ne 0 ]]; then
   echo "Error: Failed to create environment '$ENV_NAME' or copy the blueprint." >&2
   exit 1
 fi
 
 # Check if config.yaml exists in the created ENV folder
-if [[ ! -r "./$ENV_NAME/config.yaml" ]]; then
-  echo "Error: File ./$ENV_NAME/config.yaml must exist." >&2
+if [[ ! -r "./$ENV_NAME/config.yaml" || ! -r "./$ENV_NAME/config.init.yaml" ]]; then
+  echo "Error: Files ./$ENV_NAME/config.yaml & ./$ENV_NAME/config.init.yaml must exist." >&2
   exit 1
 fi
 
 # Apply parameters from CONFIG to config.yaml using sed
-sed -i "s|ENV_NAME:.*|ENV_NAME: $ENV_NAME|g" ./$ENV_NAME/config.yaml
-sed -i "s|host_prefix:.*|host_prefix: $host_prefix|g" "./$ENV_NAME/config.yaml"
-sed -i "s|ip_prefix:.*|ip_prefix: $ip_prefix|g" "./$ENV_NAME/config.yaml"
-sed -i "s|vm_box:.*|vm_box: $vm_box|g" "./$ENV_NAME/config.yaml"
-sed -i "s|SHARED_mount_point:.*|SHARED_mount_point: $SHARED_mount_point|g" "./$ENV_NAME/config.yaml"
-sed -i "s|SHARED_LOCAL_point:.*|SHARED_LOCAL_point: $SHARED_LOCAL_point|g" "./$ENV_NAME/config.yaml"
-sed -i "s|network_type:.*|network_type: $network_type|g" "./$ENV_NAME/config.yaml"
-sed -i "s|ram_size:.*|ram_size: $ram_size|g" "./$ENV_NAME/config.yaml"
-sed -i "s|cpu_count:.*|cpu_count: $cpu_count|g" "./$ENV_NAME/config.yaml"
-sed -i "s|node_count:.*|node_count: $node_count|g" "./$ENV_NAME/config.yaml"
-sed -i "s|root_password:.*|root_password: $root_password|g" "./$ENV_NAME/config.yaml"
-sed -i "s|common_customization_config:.*|common_customization_config: $common_customization_config|g" "./$ENV_NAME/config.yaml"
-sed -i "s|common_customization_script:.*|common_customization_script: $common_customization_script|g" "./$ENV_NAME/config.yaml"
+sed -i "s|ENV_NAME:.*|ENV_NAME: $ENV_NAME|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
+sed -i "s|host_prefix:.*|host_prefix: $host_prefix|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
+sed -i "s|ip_prefix:.*|ip_prefix: $ip_prefix|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
+sed -i "s|vmbox:.*|vmbox: $vmbox|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
+
+sed -i "s|guest_additions_installed:.*|guest_additions_installed: $vmbox_guest_additions_installed|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
+sed -i "s|guest_additions_installation_script:.*|guest_additions_installation_script: $vmbox_guest_additions_installation_script|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
+
+sed -i "s|SHARED_mount_point:.*|SHARED_mount_point: $SHARED_mount_point|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
+sed -i "s|SHARED_LOCAL_point:.*|SHARED_LOCAL_point: $SHARED_LOCAL_point|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
+sed -i "s|network_type:.*|network_type: $network_type|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
+sed -i "s|ram_size:.*|ram_size: $ram_size|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
+sed -i "s|cpu_count:.*|cpu_count: $cpu_count|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
+sed -i "s|node_count:.*|node_count: $node_count|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
+sed -i "s|root_password:.*|root_password: $root_password|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
+sed -i "s|^common_customization_config:.*|common_customization_config: $common_customization_config|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
+sed -i "s|^common_customization_script:.*|common_customization_script: $common_customization_script|g" "./$ENV_NAME/config.yaml" "$ENV_NAME/config.init.yaml"
 
 # If ENV specific configuration files exist, copy these into the ENV folder
 if [[ -f "$customization_config" ]]; then
