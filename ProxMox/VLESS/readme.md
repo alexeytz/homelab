@@ -2,7 +2,7 @@
 
 The assumption is that you have your own domain and certbot supports your provider: https://eff-certbot.readthedocs.io/en/latest/using.html#dns-plugins
 
-The entire configuration done as root.
+The entire configuration was done as root.
 
 ## Install snap (if not there yet)
 
@@ -46,12 +46,12 @@ Follow your plugin steps (https://eff-certbot.readthedocs.io/en/latest/using.htm
 
 ### Create certificate
 
-This example is for cloudflare (https://certbot-dns-cloudflare.readthedocs.io/en/stable/).
+This example is for Cloudflare (https://certbot-dns-cloudflare.readthedocs.io/en/stable/). Instructions for token creation: https://developers.cloudflare.com/fundamentals/api/get-started/create-token/.
 
 ```
 echo "dns_cloudflare_api_token = <YOUR API KEY for DNS changes in Cloudflare>" > ~/cloudflare.ini
 ```
-Create certificates (At this time you must have your host ports 80/443 exposed to internet, enable NAT/FireWall Port Forwarding rules as required):
+Create certificates (At this time, you must have your host ports 80/443 exposed to the internet, enable NAT/Firewall Port Forwarding rules as required):
 
 ```
 certbot certonly \
@@ -68,15 +68,15 @@ root@us24-04-vless:~# certbot certonly \
   --dns-cloudflare \
   --dns-cloudflare-credentials ~/cloudflare.ini \
   --dns-cloudflare-propagation-seconds 30 \
-  -d *.t<censored>v.net
+  -d *.t-v.net
 Saving debug log to /var/log/letsencrypt/letsencrypt.log
-Requesting a certificate for *.t<censored>v.net
+Requesting a certificate for *.t-v.net
 Unsafe permissions on credentials configuration file: /root/cloudflare.ini
 Waiting 30 seconds for DNS changes to propagate
 
 Successfully received certificate.
-Certificate is saved at: /etc/letsencrypt/live/t<censored>v.net/fullchain.pem
-Key is saved at:         /etc/letsencrypt/live/tt<censored>v.net/privkey.pem
+Certificate is saved at: /etc/letsencrypt/live/t-v.net/fullchain.pem
+Key is saved at:         /etc/letsencrypt/live/t-v.net/privkey.pem
 This certificate expires on 2026-05-23.
 These files will be updated when the certificate renews.
 Certbot has set up a scheduled task to automatically renew this certificate in the background.
@@ -89,7 +89,7 @@ If you like Certbot, please consider supporting our work by:
 root@us24-04-vless:~#
 ```
 
-Note certificate location.
+Note the certificate location.
 
 Certbot scheduled a task for automated certificate renewal:
 
@@ -106,13 +106,13 @@ Pass --all to see loaded but inactive timers, too.
 root@us24-04-vless:~#
 ```
 
-It checks certificate validity date and would run an update only once the actual time comes. To check log use:
+It checks the certificate's validity date and updates it only when the validity period ends. To check the log, use:
 
 ```
 journalctl -u  snap.certbot.renew.timer
 ```
 
-#### Set sertificate permissions, so XRAY would be able to read certificate
+#### Set certificate permissions, so XRAY would be able to read them.
 
 ```
 chmod -R o+rx /etc/letsencrypt/*
@@ -120,7 +120,7 @@ chmod -R o+rx /etc/letsencrypt/*
 
 ## Install and configure XRAY.
 
-### Make sure we have "brb" enabled.
+### Make sure "brb" is enabled.
 
 ```
 sysctl -a | grep net.ipv4.tcp_congestion_control
@@ -158,17 +158,16 @@ https://github.com/XTLS/Xray-install
 bash -c "$(curl -4 -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 ```
 
-Confirm it is sucessfully installed.
+Confirm it is successfully installed from the output on the screen.
 
 ### Configure XRAY
 
-#### Set enviromnent
+#### Set environment
 
-The assumption is that only one domain served by the server (one folder is inside /etc/letsencrypt/archive/).
+The assumption is that only one domain is served by the server (i.e., there is only one folder inside /etc/letsencrypt/archive/).
 
 ```
 mkdir ~/xray && \
-echo "export uuid=$(xray uuid)" >> ~/xray/xray.env && \
 echo "export domain=$(ls /etc/letsencrypt/archive/)" >> ~/xray/xray.env && \
 echo "export certificate=/etc/letsencrypt/live/$(ls /etc/letsencrypt/archive/)/fullchain.pem" >> ~/xray/xray.env && \
 echo "export keyfile=/etc/letsencrypt/live/$(ls /etc/letsencrypt/archive/)/privkey.pem" >> ~/xray/xray.env && \
@@ -179,7 +178,6 @@ Inspect and adjust ~/xray/xray.env as per your needs, E.g.:
 
 ```
 root@us24-04-vless:~/xray# cat ~/xray/xray.env 
-export uuid=c237da96-7457-42ba-b10f-5f9a47f0d688
 export domain=tubearchivist.t-v.net
 export certificate=/etc/letsencrypt/live/t-v.net/fullchain.pem
 export keyfile=/etc/letsencrypt/live/t-v.net/privkey.pem
@@ -189,7 +187,7 @@ root@us24-04-vless:~/xray#
 ```
 
 
-#### create config.json in ~/xray
+#### Create config.json in ~/xray
 
 ```
 chmod +x create_config.json.sh && ./create_config.json.sh 
@@ -197,19 +195,20 @@ chmod +x create_config.json.sh && ./create_config.json.sh
 
 Inspect and adjust ~/xray/config.json. 
 
-#### copy config.json to XRAY cinfig folder
+#### Copy config.json to XRAY config folder
 
 ```
-cp ~/xray/config.json /usr/local/etc/xray/config.json
+cp ~/xray/config.json /usr/local/etc/xray/config.json && \
+chmod +r /usr/local/etc/xray/config.json
 ```
 
-#### restart XRAY
+#### Restart XRAY
 
 ```
 systemctl restart xray; sleep 1; systemctl status xray
 ```
 
-#### check XRAY ports
+#### Check XRAY ports
 
 ```
 ss -tulp|grep -i xray
@@ -225,15 +224,23 @@ root@us24-04-vless:~/xray#
 
 ## Helper scripts
 
-### Install required packages
+### Install prereq packages
 
 ```
 apt install -y qrencode jq
 ```
 
-### xray_uri_first.sh
+### Script list
 
-Prints connection detail for a "first" user.
+```
+xray_add_user.sh - to add user.
+xray_list_users.sh - to list users.
+xray_rm_user.sh - to remove the user.
+xray_uri_user.sh - to print the user's connection URI and QR code.
+```
 
+## Add XRAY restart hook to certbot post renewal
 
-
+```
+certbot reconfigure --cert-name yourdomain.xyz --deploy-hook "chmod -R o+rx /etc/letsencrypt/* && systemctl restart xray"
+```

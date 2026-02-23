@@ -49,6 +49,8 @@ fi
 
 mv -f "$tmp" "$CONFIG" || err "Failed to write updated config"
 
+chmod +r /usr/local/etc/xray/config.json
+
 # Restart the Xray service
 if ! systemctl restart xray; then
     err "Failed to restart xray service"

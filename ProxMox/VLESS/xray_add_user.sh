@@ -32,6 +32,8 @@ client=$(jq -n \
 jq --argjson c "$client" \
    '.inbounds[0].settings.clients += [$c]' "$CONFIG" >"$CONFIG.tmp" && mv "$CONFIG.tmp" "$CONFIG"
 
+chmod +r /usr/local/etc/xray/config.json
+
 # Restart Xray so the change takes effect
 systemctl restart xray
 
