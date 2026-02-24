@@ -4,6 +4,8 @@ The assumption is that you have your own domain and certbot supports your provid
 
 The entire configuration was done as root.
 
+This setup has been tested and successfully worked on Ubuntu 24.04.
+
 ## Install snap (if not there yet)
 
 ```

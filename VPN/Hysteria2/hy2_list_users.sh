@@ -16,8 +16,7 @@ userpass_key=($(jq -r '.auth.userpass | keys[]' "$CONFIG"))
 
 # If no elemets in array
 if [[ ${#userpass_key[@]} -eq 0 ]]; then
-    echo "No users detected in $CONFIG."
-    exit 1
+    err "No users detected in $CONFIG."
 fi
 
 # Print the user list

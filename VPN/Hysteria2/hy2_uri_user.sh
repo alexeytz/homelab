@@ -4,6 +4,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 CONFIG="/etc/hysteria/config.json"
+[[ -r "$CONFIG" ]] || err "Config file '$CONFIG' missing or unreadable."
 
 err() { printf '%s\n' "$*" >&2; exit 1; }
 
