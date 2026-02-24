@@ -1,104 +1,104 @@
 {
-  "dns": {
-    "servers": [
-      "localhost"
-    ]
-  },
-  "log": {
-    "access": "/var/log/xray/access.log",
-    "error": "/var/log/xray/error.log",
-    "loglevel": "debug"
-  },
-  "policy": {
-    "levels": {
-      "0": {
-        "connIdle": 600,
-        "handshake": 4,
-        "uplinkOnly": 4,
-        "downlinkOnly": 10,
-        "bufferSize": 32768
+   "dns": {
+      "servers": [
+         "localhost"
+      ]
+   },
+   "log": {
+      "access": "/var/log/xray/access.log",
+      "error": "/var/log/xray/error.log",
+      "loglevel": "debug"
+   },
+   "policy": {
+      "levels": {
+         "0": {
+            "connIdle": 600,
+            "handshake": 4,
+            "uplinkOnly": 4,
+            "downlinkOnly": 10,
+            "bufferSize": 32768
+         }
       }
-    }
-  },
-  "routing": {
-    "domainStrategy": "IPIfNonMatch",
-    "rules": [
+   },
+   "routing": {
+      "domainStrategy": "IPIfNonMatch",
+      "rules": [
+         {
+            "domain": [
+               "geosite:category-ads-all"
+            ],
+            "outboundTag": "block"
+         },
+         {
+            "ip": [
+               "0.0.0.0/0",
+               "::/0"
+            ],
+            "outboundTag": "direct"
+         }
+      ]
+   },
+   "inbounds": [
       {
-        "domain": [
-          "geosite:category-ads-all"
-        ],
-        "outboundTag": "block"
-      },
-      {
-        "ip": [
-          "0.0.0.0/0",
-          "::/0"
-        ],
-        "outboundTag": "direct"
-      }
-    ]
-  },
-  "inbounds": [
-    {
-      "port": 443,
-      "protocol": "vless",
-      "settings": {
-        "clients": [
-          {
-            "email": "pioneer",
-            "id": "REPLACE-UUID",
-            "flow": "xtls-rprx-vision",
-            "level": 0
-          }
-        ],
-        "decryption": "none",
-        "fallbacks": [
-          {
-            "name": "REPLACE-DOMAIN",
-            "dest": "REPLACE-IP:REPLACE-PORT"
-          },
-          {
-            "dest": 80
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "tcp",
-        "security": "tls",
-        "tlsSettings": {
-          "fingerprint": "chrome",
-          "alpn": "http/1.1",
-          "certificates": [
-            {
-              "certificateFile": "REPLACE-CERTIFICATE",
-              "keyFile": "REPLACE-KEYFILE"
+         "port": 443,
+         "protocol": "vless",
+         "settings": {
+            "clients": [
+               {
+                  "email": "pioneer",
+                  "id": "REPLACE-UUID",
+                  "flow": "xtls-rprx-vision",
+                  "level": 0
+               }
+            ],
+            "decryption": "none",
+            "fallbacks": [
+               {
+                  "name": "REPLACE-DOMAIN",
+                  "dest": "REPLACE-IP:REPLACE-PORT"
+               },
+               {
+                  "dest": 80
+               }
+            ]
+         },
+         "streamSettings": {
+            "network": "tcp",
+            "security": "tls",
+            "tlsSettings": {
+               "fingerprint": "chrome",
+               "alpn": "http/1.1",
+               "certificates": [
+                  {
+                     "certificateFile": "REPLACE-CERTIFICATE",
+                     "keyFile": "REPLACE-KEYFILE"
+                  }
+               ]
             }
-          ]
-        }
+         },
+         "mux": {
+            "enabled": true,
+            "concurrency": 8
+         }
       },
-      "mux": {
-        "enabled": true,
-        "concurrency": 8
+      {
+         "port": 9999,
+         "protocol": "dokodemo-door",
+         "settings": {
+            "address": "127.0.0.1",
+            "port": 9999
+         },
+         "tag": "api"
       }
-    },
-    {
-      "port": 9999,
-      "protocol": "dokodemo-door",
-      "settings": {
-        "address": "127.0.0.1",
-        "port": 9999
+   ],
+   "outbounds": [
+      {
+         "protocol": "freedom",
+         "tag": "direct"
       },
-      "tag": "api"
-    }
-  ],
-  "outbounds": [
-    {
-      "protocol": "freedom",
-      "tag": "direct"
-    },
-    {
-      "protocol": "blackhole",
-      "tag": "block"
-    }
-  ]
+      {
+         "protocol": "blackhole",
+         "tag": "block"
+      }
+   ]
 }
