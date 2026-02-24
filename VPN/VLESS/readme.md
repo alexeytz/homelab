@@ -1,6 +1,6 @@
 # How to get VLESS running for VPN and as a reverse proxy.
 
-The assumption is that you have your own domain and certbot supports your provider: https://eff-certbot.readthedocs.io/en/latest/using.html#dns-plugins
+The assumption is that you have your own domain and certbot supports your provider: https://eff-certbot.readthedocs.io/en/latest/using.html#dns-plugins to handle the DNS challenge.
 
 The entire configuration was done as root.
 
@@ -60,6 +60,7 @@ certbot certonly \
   --dns-cloudflare \
   --dns-cloudflare-credentials ~/cloudflare.ini \
   --dns-cloudflare-propagation-seconds 30 \
+  --agree-tos
   -d *.youdomain.xyz
 ```
 
@@ -241,8 +242,8 @@ xray_rm_user.sh - to remove the user.
 xray_uri_user.sh - to print the user's connection URI and QR code.
 ```
 
-## Add XRAY restart hook to certbot post renewal
+## Add deploy hook to certbot post renewal to make sure the right permissions are set
 
 ```
-certbot reconfigure --cert-name yourdomain.xyz --deploy-hook "chmod -R o+rx /etc/letsencrypt/* && systemctl restart xray"
+certbot reconfigure --cert-name yourdomain.xyz --deploy-hook "chmod -R o+rx /etc/letsencrypt/*"
 ```

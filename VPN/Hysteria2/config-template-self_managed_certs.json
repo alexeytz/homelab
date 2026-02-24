@@ -1,12 +1,9 @@
 {
-   "listen": ":443",
-   "acme": {
-      "type": "http",
-      "domains": [
-         "yourdomain1.com",
-         "yourdomain2.com"
-      ],
-      "email": "your_email@foracme-notifications.com"
+   "listen": ":REPLACE-PORT",
+   "tls": {
+      "addr": "REPLACE-DOMAIN",
+      "cert": "REPLACE-CERTIFICATE",
+      "key": "REPLACE-KEYFILE"
    },
    "obfs": {
       "type": "salamander",
@@ -82,14 +79,5 @@
    },
    "trafficStats": {
       "listen": "127.0.0.1:25413"
-   },
-   "masquerade": {
-      "type": "file",
-      "file": {
-         "dir": "/var/www/masq"
-      },
-      "listenHTTP": ":80",
-      "listenHTTPS": ":8443",
-      "forceHTTPS": true
    }
 }
