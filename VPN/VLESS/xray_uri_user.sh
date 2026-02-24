@@ -12,10 +12,13 @@ err() {
 }
 
 [[ -r "$XRAY_ENV" ]] || err "Env file '$XRAY_ENV' missing or unreadable."
+# shellcheck disable=SC1090
 source "$XRAY_ENV"
 
 # Pull all client e‑mails into an array
-emails=($(jq -r '.inbounds[0].settings.clients[].email' "$CONFIG"))
+#emails=($(jq -r '.inbounds[0].settings.clients[].email' "$CONFIG"))
+# For bash 4.4+, must not be in posix mode, may use temporary files
+mapfile -t emails < <(jq -r '.inbounds[0].settings.clients[].email' "$CONFIG")
 
 # Show a numbered list
 echo "Registered users:"
@@ -52,6 +55,7 @@ uuid=$(jq -r ".inbounds[0].settings.clients[${index}].id" "$CONFIG")
 fp=$(jq -r '.inbounds[0].streamSettings.tlsSettings.fingerprint' "$CONFIG")
 
 # Build the final URL
+# shellcheck disable=SC2154
 link="${protocol}://${uuid}@${domain}:${port}?security=tls&alpn=http%2F1.1&fp=${fp}&spx=/&type=tcp&flow=xtls-rprx-vision&headerType=none&encryption=none#${email}"
 
 printf '\n%s\n\n' "$link"
