@@ -5,19 +5,25 @@ set -euo pipefail
 CONFIG="/usr/local/etc/xray/config.json"
 ENV_FILE="${HOME}/xray/xray.env"
 
-[[ -r "$ENV_FILE" ]] || { echo "Env file '$ENV_FILE' missing or unreadable"; exit 1; }
+[[ -r "$ENV_FILE" ]] || {
+   echo "Env file '$ENV_FILE' missing or unreadable"
+   exit 1
+}
 source "$ENV_FILE"
 
 # Get the email (no spaces, no empty string)
 read -rp "New user (no spaces): " email
 # Remove spaces
 email=${email//[[:space:]]/}
-[[ -z "$email" ]] && { echo "Invalid username"; exit 1; } || { echo "Proceeding with user: $email"; }
+[[ -z "$email" ]] && {
+   echo "Invalid username"
+   exit 1
+} || { echo "Proceeding with user: $email"; }
 
 # Make sure the user doesn’t already exist
 if jq -e --arg e "$email" '.inbounds[0].settings.clients[] | select(.email==$e)' "$CONFIG" >/dev/null; then
-    echo "User '$email' already exists"
-    exit 1
+   echo "User '$email' already exists"
+   exit 1
 fi
 
 # Create a fresh UUID for the client
@@ -25,9 +31,9 @@ uuid=$(xray uuid)
 
 # Append the new client to the config (atomic write)
 client=$(jq -n \
-    --arg e "$email" \
-    --arg u "$uuid" \
-    '{email:$e, id:$u, flow:"xtls-rprx-vision", "level":0}')
+   --arg e "$email" \
+   --arg u "$uuid" \
+   '{email:$e, id:$u, flow:"xtls-rprx-vision", "level":0}')
 
 jq --argjson c "$client" \
    '.inbounds[0].settings.clients += [$c]' "$CONFIG" >"$CONFIG.tmp" && mv "$CONFIG.tmp" "$CONFIG"

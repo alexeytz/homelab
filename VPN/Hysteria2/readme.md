@@ -24,7 +24,7 @@ echo "export hy2_port=443" >> ~/hy2/hy2.env || echo -e "\n\n\n. . . ERROR: ~/hy2
 Inspect and adjust ~/hy2/hy2.env as per your needs, E.g.:
 
 ```
-root@us24-04-vless:~/hy2# cat ~/hy2/hy2.env 
+root@us24-04-vless:~/hy2# cat ~/hy2/hy2.env
 export domain=tubearchivist.t-v.net
 export certificate=/etc/letsencrypt/live/t-v.net/fullchain.pem
 export keyfile=/etc/letsencrypt/live/t-v.net/privkey.pem
@@ -36,10 +36,10 @@ root@us24-04-vless:~/hy2#
 ## Create config.json in ~/hy2
 
 ```
-chmod +x create_config.json.sh && ./create_config.json.sh 
+chmod +x create_config.json.sh && ./create_config.json.sh
 ```
 
-Inspect and adjust ~/hy2/config.json. 
+Inspect and adjust ~/hy2/config.json.
 
 ## Copy config.json to Hysteria2 config folder
 

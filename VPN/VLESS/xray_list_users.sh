@@ -3,8 +3,8 @@
 set -euo pipefail
 
 err() {
-    echo "ERROR: $1" >&2
-    exit 1
+   echo "ERROR: $1" >&2
+   exit 1
 }
 
 # Verify the Xray configuration file
@@ -16,12 +16,12 @@ emails=($(jq -r '.inbounds[0].settings.clients[].email' "$CONFIG"))
 
 # If no elemets in array
 if [[ ${#emails[@]} -eq 0 ]]; then
-    echo "No users detected in $CONFIG."
-    exit 1
+   echo "No users detected in $CONFIG."
+   exit 1
 fi
 
 # Print the user list
 echo "User list:"
 for idx in "${!emails[@]}"; do
-    printf "%d. %s\n" $((idx + 1)) "${emails[idx]}"
+   printf "%d. %s\n" $((idx + 1)) "${emails[idx]}"
 done

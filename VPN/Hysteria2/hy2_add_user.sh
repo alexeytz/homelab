@@ -3,8 +3,8 @@
 set -euo pipefail
 
 err() {
-    echo "ERROR: $1" >&2
-    exit 1
+   echo "ERROR: $1" >&2
+   exit 1
 }
 
 CONFIG="/etc/hysteria/config.json"
@@ -18,7 +18,7 @@ user=${user//[[:space:]]/}
 
 # Make sure the key does not already exist in auth.userpass
 if jq -e --arg k "$user" '.auth.userpass | has($k)' "$CONFIG" >/dev/null; then
-    err "User '$user' already exists in the config"
+   err "User '$user' already exists in the config"
 fi
 
 # Create a fresh UUID

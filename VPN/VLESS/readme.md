@@ -100,7 +100,7 @@ root@us24-04-vless:~# systemctl list-timers|grep certbot
 Mon 2026-02-23 07:26:00 UTC      11h Sun 2026-02-22 19:38:25 UTC 22min ago snap.certbot.renew.timer       snap.certbot.renew.service
 root@us24-04-vless:~#
 root@us24-04-vless:~# systemctl list-timers snap.certbot.renew.timer
-NEXT                        LEFT LAST                           PASSED UNIT                     ACTIVATES                 
+NEXT                        LEFT LAST                           PASSED UNIT                     ACTIVATES
 Mon 2026-02-23 07:26:00 UTC  11h Sun 2026-02-22 19:38:25 UTC 24min ago snap.certbot.renew.timer snap.certbot.renew.service
 
 1 timers listed.
@@ -179,7 +179,7 @@ echo "export proxy_port=80" >> ~/xray/xray.env || echo -e "\n\n\n. . . ERROR: ~/
 Inspect and adjust ~/xray/xray.env as per your needs, E.g.:
 
 ```
-root@us24-04-vless:~/xray# cat ~/xray/xray.env 
+root@us24-04-vless:~/xray# cat ~/xray/xray.env
 export domain=tubearchivist.t-v.net
 export certificate=/etc/letsencrypt/live/t-v.net/fullchain.pem
 export keyfile=/etc/letsencrypt/live/t-v.net/privkey.pem
@@ -192,10 +192,10 @@ root@us24-04-vless:~/xray#
 #### Create config.json in ~/xray
 
 ```
-chmod +x create_config.json.sh && ./create_config.json.sh 
+chmod +x create_config.json.sh && ./create_config.json.sh
 ```
 
-Inspect and adjust ~/xray/config.json. 
+Inspect and adjust ~/xray/config.json.
 
 #### Copy config.json to XRAY config folder
 
@@ -218,9 +218,9 @@ ss -tulp|grep -i xray
 
 ```
 root@us24-04-vless:~/xray# ss -tulp|grep -i xray
-tcp   LISTEN 0      4096                 *:9999              *:*    users:(("xray",pid=3224,fd=6))                        
-tcp   LISTEN 0      4096                 *:https             *:*    users:(("xray",pid=3224,fd=7))                        
-root@us24-04-vless:~/xray# 
+tcp   LISTEN 0      4096                 *:9999              *:*    users:(("xray",pid=3224,fd=6))
+tcp   LISTEN 0      4096                 *:https             *:*    users:(("xray",pid=3224,fd=7))
+root@us24-04-vless:~/xray#
 ```
 
 

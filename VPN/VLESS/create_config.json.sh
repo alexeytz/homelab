@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 error() {
-    echo "ERROR: $1" >&2
-    exit 1
+   echo "ERROR: $1" >&2
+   exit 1
 }
 
 set -euo pipefail

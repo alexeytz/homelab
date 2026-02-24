@@ -6,7 +6,10 @@ IFS=$'\n\t'
 CONFIG="/usr/local/etc/xray/config.json"
 XRAY_ENV="${HOME}/xray/xray.env"
 
-err() { printf '%s\n' "$*" >&2; exit 1; }
+err() {
+   printf '%s\n' "$*" >&2
+   exit 1
+}
 
 [[ -r "$XRAY_ENV" ]] || err "Env file '$XRAY_ENV' missing or unreadable."
 source "$XRAY_ENV"
@@ -17,16 +20,16 @@ emails=($(jq -r '.inbounds[0].settings.clients[].email' "$CONFIG"))
 # Show a numbered list
 echo "Registered users:"
 for i in "${!emails[@]}"; do
-    printf '  %d) %s\n' $((i + 1)) "${emails[$i]}"
+   printf '  %d) %s\n' $((i + 1)) "${emails[$i]}"
 done
 
 # Ask for a selection and validate it
 read -rp 'Enter user ID from the list above: ' uid
 
 # Check that uid is a positive integer in range
-if ! [[ "$uid" =~ ^[0-9]+$ ]] || (( uid < 1 || uid > ${#emails[@]} )); then
-    err "Error, number range must be within 1 to ${#emails[@]}"
-    exit 1
+if ! [[ "$uid" =~ ^[0-9]+$ ]] || ((uid < 1 || uid > ${#emails[@]})); then
+   err "Error, number range must be within 1 to ${#emails[@]}"
+   exit 1
 fi
 
 # Convert to 0‑based index
@@ -36,7 +39,7 @@ email="${emails[$idx]}"
 # Retrieve the needed fields from the JSON
 #   The `index` here is the array index of the client
 index=$(
-    jq --arg email "$email" '
+   jq --arg email "$email" '
         .inbounds[0].settings.clients
         | to_entries[]
         | select(.value.email == $email)
