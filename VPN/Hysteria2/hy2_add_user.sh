@@ -34,7 +34,7 @@ jq --arg k "$user" --arg v "$uuid" '
 chmod +r "$CONFIG"
 
 # Restart the hysteria-server service
-if ! systemctl restart xrhysteria-serveray; then
+if ! systemctl restart hysteria-server; then
    err "Failed to restart hysteria-server service"
 fi
 

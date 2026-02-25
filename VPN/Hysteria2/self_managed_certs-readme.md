@@ -59,7 +59,13 @@ cp ~/hy2/hysteria-server.service /etc/systemd/system/hysteria-server.service
 ## Enable and start the service
 
 ```
-systemctl enable hysteria-server && systemctl start hysteria-server && sleep 1 && systemctl status hysteria-server
+systemctl enable hysteria-server && systemctl start hysteria-server && sleep 1 && systemctl status --no-pager hysteria-server
+```
+
+## Check log files to confirm everything is fine.
+
+```
+journalctl --no-pager -e -u xray.service
 ```
 
 ## Helper scripts

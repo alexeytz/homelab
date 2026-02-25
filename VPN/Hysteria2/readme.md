@@ -44,6 +44,8 @@ Take a copy of config-template.json and adjust it as per your needs.
 
 Place it into /etc/hysteria/config.json
 
+############################
+
 ## Adjust Hysteria service file to use JSON
 
 ```
@@ -59,7 +61,7 @@ systemctl daemon-reload && \
 systemctl enable hysteria-server && \
 systemctl start hysteria-server && \
 sleep 1 && \
-systemctl status hysteria-server
+systemctl status --no-pager hysteria-server
 ```
 
 ## Check log files to confirm everything is fine.

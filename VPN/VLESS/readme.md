@@ -210,7 +210,7 @@ chmod +r /usr/local/etc/xray/config.json
 #### Restart XRAY
 
 ```
-systemctl restart xray; sleep 1; systemctl status xray
+systemctl restart xray; sleep 1; systemctl status --no-pager xray
 ```
 
 #### Check XRAY ports

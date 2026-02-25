@@ -45,7 +45,7 @@ systemctl daemon-reload
 Take a copy of config-template.json and rename it to config.json, modifying it as per your setup. There are copies of the working/tested config-example and the one used for YouTube. It is straightforward.
 
 ```
-(base) bb@dell7820:~/Documents/GitHub-alexeytz/homelab/VPN/VLESS-over-Hysteria2$ diff ./config-template.json ./config-example.json
+(base) bb@dell7820:~/homelab/VPN/VLESS-over-Hysteria2$ diff ./config-template.json ./config-example.json
 3c3
 <       "addr": "REPLACE-DOMAIN"
 ---
@@ -68,7 +68,7 @@ Take a copy of config-template.json and rename it to config.json, modifying it a
 >                      "certificateFile": "/var/lib/hysteria/acme/certificates/acme-v02.api.letsencrypt.org-directory/forest.chickenkiller.com/forest.chickenkiller.com.crt",
 >                      "keyFile": "/var/lib/hysteria/acme/certificates/acme-v02.api.letsencrypt.org-directory/forest.chickenkiller.com/forest.chickenkiller.com.key",
 >                      "serverName": "forest.chickenkiller.com"
-(base) bb@dell7820:~/Documents/GitHub-alexeytz/homelab/VPN/VLESS-over-Hysteria2$
+(base) bb@dell7820:~/homelab/VPN/VLESS-over-Hysteria2$
 ```
 
 Legend:
@@ -83,10 +83,16 @@ Legend:
 "serverName": - `your FQDN`, where the certificate/key belongs.
 ```
 
+Config file location:
+
+```
+/usr/local/etc/xray/config.json
+```
+
 ### Restart XRAY
 
 ```
-systemctl restart xray; sleep 1; systemctl status xray
+systemctl restart xray; sleep 1; systemctl status --no-pager xray
 ```
 
 #### Check XRAY ports
