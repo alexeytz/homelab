@@ -47,6 +47,7 @@ systemctl restart xray
 protocol=$(jq -r '.inbounds[0].protocol' "$CONFIG")
 port=$(jq -r '.inbounds[0].port' "$CONFIG")
 fp=$(jq -r '.inbounds[0].streamSettings.tlsSettings.fingerprint' "$CONFIG")
+domain=$(jq -r '.customization.addr' "$CONFIG")
 
 link="${protocol}://${uuid}@${domain}:${port}?security=tls&alpn=http%2F1.1&fp=${fp}&spx=/&type=tcp&flow=xtls-rprx-vision&headerType=none&encryption=none#${email}"
 

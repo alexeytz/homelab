@@ -1,4 +1,7 @@
 {
+   "customization": {
+      "addr": "REPLACE-DOMAIN"
+   },
    "listen": ":REPLACE-PORT",
    "tls": {
       "addr": "REPLACE-DOMAIN",

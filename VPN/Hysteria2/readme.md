@@ -1,65 +1,96 @@
-# Hysteria2 in addition to VLESS
+# Hysteria2 with Obfuscation
 
-The assumption is that you already have VLESS installed (https://github.com/alexeytz/homelab/tree/main/VPN/VLESS), and we'll use some Xray-installed stuff for Hysteria2.
-
-The Hysteria2 is based on UDP and won't affect VLESS. Just make sure you have NAT/Firewall rules configured to allow UDP port 443 on your system.
+The entire installation routine runs as root user.
 
 You might want to take some time to explore the full server configuration details at https://v2.hysteria.network/docs/advanced/Full-Server-Config/.
 
 This setup has been tested and successfully worked on Ubuntu 24.04.
 
-## Set environment
+## Install Hysteria2
 
-We'll use the VLESS approach and all compatible stuff generated for VLESS.
-
-```
-mkdir ~/hy2 && \
-echo "export domain=$(ls /etc/letsencrypt/archive/)" >> ~/hy2/hy2.env && \
-echo "export certificate=/etc/letsencrypt/live/$(ls /etc/letsencrypt/archive/)/fullchain.pem" >> ~/hy2/hy2.env && \
-echo "export keyfile=/etc/letsencrypt/live/$(ls /etc/letsencrypt/archive/)/privkey.pem" >> ~/hy2/hy2.env && \
-echo "export bind_device=$(ls /sys/class/net | grep -v lo | head -n 1)" >> ~/hy2/hy2.env && \
-echo "export hy2_port=443" >> ~/hy2/hy2.env || echo -e "\n\n\n. . . ERROR: ~/hy2 folder already exists . . ."
-```
-
-Inspect and adjust ~/hy2/hy2.env as per your needs, E.g.:
+https://v2.hysteria.network/docs/getting-started/Installation/#deployment-script-for-linux-servers
 
 ```
-root@us24-04-vless:~/hy2# cat ~/hy2/hy2.env
-export domain=tubearchivist.t-v.net
-export certificate=/etc/letsencrypt/live/t-v.net/fullchain.pem
-export keyfile=/etc/letsencrypt/live/t-v.net/privkey.pem
-export bind_device=ens18
-export hy2_port=443 # PORT where we'd like Hysteria2 to listen
-root@us24-04-vless:~/hy2#
+bash <(curl -fsSL https://get.hy2.sh/)
 ```
 
-## Create config.json in ~/hy2
+## Install a "masquerade" page
+
+Run the below from the Hysteria2 folder of this GitHub repo.
 
 ```
-chmod +x create_config.json.sh && ./create_config.json.sh
-```
-
-Inspect and adjust ~/hy2/config.json.
-
-## Copy config.json to Hysteria2 config folder
+sudo -u hysteria mkdir /var/lib/hysteria/www && \
+cp ./webpage/index.html /var/lib/hysteria/www/ && \
+chown hysteria:hysteria /var/lib/hysteria/www/* && \
+ls -l /var/lib/hysteria/www/ || echo -e "\n\n\n . . . ERROR: Something went wrong . . ."
 
 ```
-cp ~/hy2/config.json /etc/hysteria/config.json && \
-chmod +r /etc/hysteria/config.json
+
+## Obtain geosite.dat
+
+Check https://v2.hysteria.network/docs/advanced/Full-Server-Config/?h=geosite.#acl, first NOTE.
+
+The below one is for RUNET:
+
 ```
+wget -O /var/lib/hysteria/geosite.dat https://github.com/runetfreedom/russia-v2ray-rules-dat/releases/latest/download/geosite.dat >/dev/null 2>&1
+```
+
+## Create config.json
+
+Take a copy of config-template.json and adjust it as per your needs.
+
+Place it into /etc/hysteria/config.json
 
 ## Adjust Hysteria service file to use JSON
 
 ```
-cp /etc/systemd/system/hysteria-server.service ~/hy2/hysteria-server.service
-sed -i 's|ExecStart=/usr/local/bin/hysteria server --config /etc/hysteria/config.*|ExecStart=/usr/local/bin/hysteria server --config /etc/hysteria/config.json|' ~/hy2/hysteria-server.service
-cp ~/hy2/hysteria-server.service /etc/systemd/system/hysteria-server.service
+cp /etc/systemd/system/hysteria-server.service ~/hysteria-server.service && \
+sed -i 's|ExecStart=/usr/local/bin/hysteria server --config /etc/hysteria/config.*|ExecStart=/usr/local/bin/hysteria server --config /etc/hysteria/config.json|' ~/hysteria-server.service
+cp ~/hysteria-server.service /etc/systemd/system/hysteria-server.service
 ```
 
 ## Enable and start the service
 
 ```
-systemctl enable hysteria-server && systemctl start hysteria-server && sleep 1 && systemctl status hysteria-server
+systemctl daemon-reload && \
+systemctl enable hysteria-server && \
+systemctl start hysteria-server && \
+sleep 1 && \
+systemctl status hysteria-server
 ```
 
+## Check log files to confirm everything is fine.
 
+https://v2.hysteria.network/docs/getting-started/Server-Installation-Script/?h=log#logs
+
+```
+journalctl --no-pager -e -u hysteria-server.service
+```
+
+## Hysteria2 maintains its ceritificaetes in
+
+```
+ls -l /var/lib/hysteria/acme/
+```
+
+## Time to check your webpage
+
+I hope it works. :)
+
+## Helper scripts
+
+### Install prereq packages
+
+```
+apt install -y qrencode jq
+```
+
+### Script list
+
+```
+hy2_add_user.sh - to add user.
+hy2_list_users.sh - to list users.
+hy2_rm_user.sh - to remove the user.
+hy2_uri_user.sh - to print the user's connection URI and QR code.
+```

@@ -1,4 +1,7 @@
 {
+   "customization": {
+      "addr": "yourdomain2.com"
+   },
    "listen": ":443",
    "acme": {
       "type": "http",
@@ -78,7 +81,7 @@
          "reject(192.168.0.0/16)",
          "reject(fc00::/7)"
       ],
-      "geosite": "/usr/local/share/xray/geosite.dat"
+      "geosite": "/var/lib/hysteria/geosite.dat"
    },
    "trafficStats": {
       "listen": "127.0.0.1:25413"

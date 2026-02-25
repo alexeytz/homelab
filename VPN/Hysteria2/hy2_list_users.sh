@@ -12,7 +12,9 @@ CONFIG="/etc/hysteria/config.json"
 [[ -r "$CONFIG" ]] || err "Config file '$CONFIG' missing or unreadable."
 
 # Pull the e‑mail list into array
-userpass_key=($(jq -r '.auth.userpass | keys[]' "$CONFIG"))
+#userpass_key=($(jq -r '.auth.userpass | keys[]' "$CONFIG"))
+# For bash 4.4+, must not be in posix mode, may use temporary files
+mapfile -t userpass_key < <(jq -r '.auth.userpass | keys[]' "$CONFIG")
 
 # If no elemets in array
 if [[ ${#userpass_key[@]} -eq 0 ]]; then

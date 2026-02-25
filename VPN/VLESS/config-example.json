@@ -1,6 +1,6 @@
 {
    "customization": {
-      "addr": "REPLACE-DOMAIN"
+      "addr": "forest.chickenkiller.com"
    },
    "dns": {
       "servers": [
@@ -49,7 +49,7 @@
             "clients": [
                {
                   "email": "pioneer",
-                  "id": "REPLACE-UUID",
+                  "id": "812cc04b-c89e-4758-beed-33b3780c516d",
                   "flow": "xtls-rprx-vision",
                   "level": 0
                }
@@ -57,8 +57,8 @@
             "decryption": "none",
             "fallbacks": [
                {
-                  "name": "REPLACE-DOMAIN",
-                  "dest": "REPLACE-IP:REPLACE-PORT"
+                  "name": "forest.chickenkiller.com",
+                  "dest": "10.69.2.3:8000"
                },
                {
                   "dest": 80
@@ -73,9 +73,9 @@
                "alpn": "http/1.1",
                "certificates": [
                   {
-                     "certificateFile": "REPLACE-CERTIFICATE",
-                     "keyFile": "REPLACE-KEYFILE",
-                     "serverName": "REPLACE-DOMAIN"
+                     "certificateFile": "/var/lib/hysteria/acme/certificates/acme-v02.api.letsencrypt.org-directory/forest.chickenkiller.com/forest.chickenkiller.com.crt",
+                     "keyFile": "/var/lib/hysteria/acme/certificates/acme-v02.api.letsencrypt.org-directory/forest.chickenkiller.com/forest.chickenkiller.com.key",
+                     "serverName": "forest.chickenkiller.com"
                   }
                ]
             }

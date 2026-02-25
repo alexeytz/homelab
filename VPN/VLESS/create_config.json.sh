@@ -24,6 +24,8 @@ cp "$TEMPLATE" "$TARGET" || error "Failed to copy template to '$TARGET'."
 # In‑place substitutions
 sed -i "s|\"id\": \"REPLACE-UUID\"|\"id\": \"${uuid}\"|g" "$TARGET"
 sed -i "s|\"name\": \"REPLACE-DOMAIN\"|\"name\": \"${domain}\"|g" "$TARGET"
+sed -i "s|\"serverName\": \"REPLACE-DOMAIN\"|\"serverName\": \"${domain}\"|g" "$TARGET"
+sed -i "s|\"addr\": \"REPLACE-DOMAIN\"|\"addr\": \"${domain}\"|g" "$TARGET"
 sed -i "s|\"dest\": \"REPLACE-IP:REPLACE-PORT\"|\"dest\": \"${proxy_ip}:${proxy_port}\"|g" "$TARGET"
 sed -i "s|\"certificateFile\": \"REPLACE-CERTIFICATE\"|\"certificateFile\": \"${certificate}\"|g" "$TARGET"
 sed -i "s|\"keyFile\": \"REPLACE-KEYFILE\"|\"keyFile\": \"${keyfile}\"|g" "$TARGET"
