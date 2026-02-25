@@ -1,6 +1,8 @@
 # Hysteria2 with Obfuscation
 
-The entire installation routine runs as root user.
+The entire installation routine runs as the root user.
+
+You must have your host ports 80/443 exposed to the internet, enable NAT/Firewall Port Forwarding and/or rules as required
 
 You might want to take some time to explore the full server configuration details at https://v2.hysteria.network/docs/advanced/Full-Server-Config/.
 
@@ -68,11 +70,13 @@ https://v2.hysteria.network/docs/getting-started/Server-Installation-Script/?h=l
 journalctl --no-pager -e -u hysteria-server.service
 ```
 
-## Hysteria2 maintains its ceritificaetes in
+## Hysteria2 maintains its certificates in
 
 ```
 ls -l /var/lib/hysteria/acme/
 ```
+
+According to my findings, it will renew certificates upon renewal.
 
 ## Time to check your webpage
 

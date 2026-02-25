@@ -4,6 +4,8 @@ The assumption is that you have your own domain and certbot supports your provid
 
 The entire configuration was done as root.
 
+You might want to take some time to explore https://github.com/XTLS/Xray-core.
+
 This setup has been tested and successfully worked on Ubuntu 24.04.
 
 ## Install snap (if not there yet)
@@ -53,7 +55,7 @@ This example is for Cloudflare (https://certbot-dns-cloudflare.readthedocs.io/en
 ```
 echo "dns_cloudflare_api_token = <YOUR API KEY for DNS changes in Cloudflare>" > ~/cloudflare.ini
 ```
-Create certificates (At this time, you must have your host ports 80/443 exposed to the internet, enable NAT/Firewall Port Forwarding rules as required):
+Create certificates (At this time, you must have your host ports 80/443 exposed to the internet, enable NAT/Firewall Port Forwarding and/or rules as required):
 
 ```
 certbot certonly \

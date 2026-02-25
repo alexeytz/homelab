@@ -6,7 +6,7 @@
    "acme": {
       "type": "http",
       "domains": [
-         "yourdomain1.com",
+         "forest.chickenkiller.com",
          "yourdomain2.com"
       ],
       "email": "your_email@foracme-notifications.com"
@@ -63,16 +63,6 @@
          "insecure": false
       }
    },
-   "outbounds": [
-      {
-         "name": "v4",
-         "type": "direct",
-         "direct": {
-            "mode": 4,
-            "bindDevice": "REPLACE-IFACE"
-         }
-      }
-   ],
    "acl": {
       "inline": [
          "reject(geosite:category-ads-all)",
@@ -89,7 +79,7 @@
    "masquerade": {
       "type": "file",
       "file": {
-         "dir": "/var/www/masq"
+         "dir": "/var/lib/hysteria/www"
       },
       "listenHTTP": ":80",
       "listenHTTPS": ":8443",
