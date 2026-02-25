@@ -3,13 +3,6 @@
 set -euo pipefail
 
 CONFIG="/usr/local/etc/xray/config.json"
-ENV_FILE="${HOME}/xray/xray.env"
-
-[[ -r "$ENV_FILE" ]] || {
-   echo "Env file '$ENV_FILE' missing or unreadable"
-   exit 1
-}
-source "$ENV_FILE"
 
 # Get the email (no spaces, no empty string)
 read -rp "New user (no spaces): " email
@@ -40,8 +33,10 @@ jq --argjson c "$client" \
 
 chmod +r /usr/local/etc/xray/config.json
 
-# Restart Xray so the change takes effect
-systemctl restart xray
+# Restart the Xray service
+if ! systemctl restart xray; then
+   err "Failed to restart xray service"
+fi
 
 # Build the connection link
 protocol=$(jq -r '.inbounds[0].protocol' "$CONFIG")

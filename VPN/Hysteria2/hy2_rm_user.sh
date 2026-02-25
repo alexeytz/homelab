@@ -55,8 +55,10 @@ mv -f "$tmp" "$CONFIG" || err "Could not write updated config."
 # Make config readable
 chmod +r "$CONFIG"
 
-# Restart hysteria-server so the change takes effect
-systemctl restart hysteria-server && sleep 1 && systemctl status hysteria-server
+# Restart the hysteria-server service
+if ! systemctl restart xrhysteria-serveray; then
+   err "Failed to restart hysteria-server service"
+fi
 
 printf '\n Key "%s" removed from auth.userpass.\n' "$delkey"
 printf 'A backup of the previous config was written to %s.bak.*\n' "$CONFIG"

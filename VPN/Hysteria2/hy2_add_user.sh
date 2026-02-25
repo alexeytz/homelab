@@ -33,10 +33,17 @@ jq --arg k "$user" --arg v "$uuid" '
 # Give the config readable permissions (so hysteria-server can read it)
 chmod +r "$CONFIG"
 
-# Restart hysteria-server so the change takes effect
-systemctl restart hysteria-server && sleep 1 && systemctl status hysteria-server
+# Restart the hysteria-server service
+if ! systemctl restart xrhysteria-serveray; then
+   err "Failed to restart hysteria-server service"
+fi
 
-echo
-echo "Added new user '$user' with ID $uuid"
-echo "Config written to $CONFIG"
-echo "hysteria-server has been restarted."
+port=$(jq -r '.listen' "$CONFIG" | awk -F ":" '{print $2}')
+domain=$(jq -r '.customization.addr' "$CONFIG")
+obfs_password=$(jq -r '.obfs.salamander.password' "$CONFIG")
+
+# Build the final URL
+link="hy2://${user}:${uuid}@${domain}:${port}?obfs=salamander&obfs-password=${obfs_password}&sni=${domain}#IPv4"
+
+printf '\n%s\n\n' "$link"
+printf '%s\n' "$link" | qrencode -t ansiutf8

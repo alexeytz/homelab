@@ -4,16 +4,11 @@ set -euo pipefail
 IFS=$'\n\t'
 
 CONFIG="/usr/local/etc/xray/config.json"
-XRAY_ENV="${HOME}/xray/xray.env"
 
 err() {
    printf '%s\n' "$*" >&2
    exit 1
 }
-
-[[ -r "$XRAY_ENV" ]] || err "Env file '$XRAY_ENV' missing or unreadable."
-# shellcheck disable=SC1090
-source "$XRAY_ENV"
 
 # Pull all client e‑mails into an array
 #emails=($(jq -r '.inbounds[0].settings.clients[].email' "$CONFIG"))

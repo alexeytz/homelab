@@ -33,8 +33,6 @@ fi
 
 user="${keys[$((uid - 1))]}"
 uuid=$(jq -r --arg key "$user" '.auth.userpass[$key]' "$CONFIG")
-
-#protocol=$(jq -r '.inbounds[0].protocol' "$CONFIG")
 port=$(jq -r '.listen' "$CONFIG" | awk -F ":" '{print $2}')
 domain=$(jq -r '.customization.addr' "$CONFIG")
 obfs_password=$(jq -r '.obfs.salamander.password' "$CONFIG")
