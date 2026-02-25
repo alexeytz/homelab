@@ -44,7 +44,48 @@ Take a copy of config-template.json and adjust it as per your needs.
 
 Place it into /etc/hysteria/config.json
 
-############################
+There are copies of the working/tested config-example and the one used for YouTube. It is straightforward.
+
+```
+(base) bb@dell7820:~/homelab/VPN/Hysteria2$ diff config-template.json config-example.json
+3c3
+<       "addr": "yourdomain2.com"
+---
+>       "addr": "hy2test2.chickenkiller.com"
+9,10c9,10
+<          "forest.chickenkiller.com",
+<          "yourdomain2.com"
+---
+>          "hy2test1.chickenkiller.com",
+>          "hy2test2.chickenkiller.com"
+12c12
+<       "email": "your_email@foracme-notifications.com"
+---
+>       "email": "blah@mail.com"
+17c17
+<          "password": "REPLACE-PASSWORD"
+---
+>          "password": "6cc4d27c9bc9a99bba092394e9f95436"
+23c23
+<          "pioneer": "REPLACE-UUID"
+---
+>          "pioneer": "c57382e7e6ffb8a2dc4b0489e17d3456561c77618c58f783eaee7e895cb16bf0"
+85c85
+<       "listenHTTPS": ":8443",
+---
+>       "listenHTTPS": ":4443",
+(base) bb@dell7820:~/homelab/VPN/Hysteria2$
+```
+
+Legend:
+
+```
+"addr": - is a customization for this repo to make helper scripts work. Use `your FQDN`
+"forest.chickenkiller.com", "yourdomain2.com" - FQDNs for your setup.
+"email": - an email you'd like to get notifications from acme about your certificates.
+"pioneer": - a first user, replace with a new UUID.
+"listenHTTPS": - port where hysteria2 listens for https trafic. use 443 is you do not plan to run XRAY+VLESS on top of the hysteria.
+```
 
 ## Adjust Hysteria service file to use JSON
 
