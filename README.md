@@ -1,6 +1,6 @@
 # Homelab — Infrastructure Automation Scripts
 
-Collection of production-grade scripts for Kubernetes deployment, Redis Enterprise lifecycle management, VPN infrastructure, and multi-platform system automation.
+Reproducible scripts for Kubernetes deployment, Redis Enterprise lifecycle management, VPN infrastructure, and multi-platform system automation.
 
 ## Contents
 
