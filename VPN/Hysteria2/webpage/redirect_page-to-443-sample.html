@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecting...</title>
+    <script>
+        // Get the current hostname (e.g., xyz.com)
+        var host = window.location.hostname;
+        // Redirect to the same host but on your HTTPS port
+		setTimeout(function() {
+           window.location.href = "https://" + host + ":443" + window.location.pathname + window.location.search;
+		}, 3000);
+    </script>
+</head>
+<body>
+    <p>Moving to secure site... <a id="link" href="#">Click here if not redirected.</a></p>
+    <script>
+        document.getElementById("link").href = "https://" + window.location.hostname + ":443";
+    </script>
+</body>
+</html>

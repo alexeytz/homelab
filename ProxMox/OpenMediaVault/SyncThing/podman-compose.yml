@@ -5,12 +5,12 @@ services:
     container_name: syncthing
     hostname: syncthing #optional
     environment:
-      - PUID=1000
-      - PGID=100
+      - PUID=1000 # user ID
+      - PGID=100 # user's group ID
       - TZ=America/New_York
     volumes:
       - ./config:/config
-      - /srv/dev-disk-by-uuid-567d5651-55be-4624-989f-8dda1a8986a1/Home/bb/MSI-Backup/:/MSI-Backup
+      - /srv/dev-disk-by-uuid-567d5651-55be-4624-989f-8dda1a8986a1/Home/cc/MSI-Backup/:/MSI-Backup
     network_mode: host
     #ports:
     #  - 8384:8384

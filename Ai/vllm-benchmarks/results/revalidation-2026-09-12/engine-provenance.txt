@@ -1,0 +1,24 @@
+/root/ab-val-20260912T173553Z-decode-nop2p.log:RUN-CONFIG arm=nop2p spec=off prefix=off model=cyankiwi/Qwen3.8-27B-AWQ-FP8 NCCL_P2P_LEVEL=unset NCCL_P2P_DISABLE=1 ts=2026-09-12T17:47:32Z
+/root/ab-val-20260912T173553Z-decode-nop2p.log:Using ['PYNCCL'] all-reduce backends
+/root/ab-val-20260912T173553Z-decode-nop2p.log:GPU KV cache size: 437,170
+/root/ab-val-20260912T173553Z-decode-nvl.log:RUN-CONFIG arm=nvl spec=off prefix=off model=cyankiwi/Qwen3.8-27B-AWQ-FP8 NCCL_P2P_LEVEL=NVL NCCL_P2P_DISABLE=unset ts=2026-09-12T17:35:54Z
+/root/ab-val-20260912T173553Z-decode-nvl.log:Using ['CUSTOM', 'PYNCCL'] all-reduce backends
+/root/ab-val-20260912T173553Z-decode-nvl.log:GPU KV cache size: 437,170
+/root/ab-val-20260912T173553Z-nvl-nocustom.log:RUN-CONFIG arm=nvl-nocustom spec=off prefix=off model=cyankiwi/Qwen3.8-27B-AWQ-FP8 NCCL_P2P_LEVEL=NVL NCCL_P2P_DISABLE=unset ts=2026-09-12T17:43:05Z
+/root/ab-val-20260912T173553Z-nvl-nocustom.log:Using ['PYNCCL'] all-reduce backends
+/root/ab-val-20260912T173553Z-nvl-nocustom.log:GPU KV cache size: 437,170
+/root/ab-val-20260912T173553Z-spec-nop2p.log:RUN-CONFIG arm=nop2p spec=on prefix=off model=cyankiwi/Qwen3.8-27B-AWQ-FP8 NCCL_P2P_LEVEL=unset NCCL_P2P_DISABLE=1 ts=2026-09-12T18:01:57Z
+/root/ab-val-20260912T173553Z-spec-nop2p.log:Using ['PYNCCL'] all-reduce backends
+/root/ab-val-20260912T173553Z-spec-nop2p.log:GPU KV cache size: 399,609
+/root/ab-val-20260912T173553Z-spec-nvl.log:RUN-CONFIG arm=nvl spec=on prefix=off model=cyankiwi/Qwen3.8-27B-AWQ-FP8 NCCL_P2P_LEVEL=NVL NCCL_P2P_DISABLE=unset ts=2026-09-12T17:52:21Z
+/root/ab-val-20260912T173553Z-spec-nvl.log:Using ['CUSTOM', 'PYNCCL'] all-reduce backends
+/root/ab-val-20260912T173553Z-spec-nvl.log:GPU KV cache size: 399,609
+/root/ab-homecheck-180900.log:RUN-CONFIG arm=nvl spec=off prefix=off model=cyankiwi/Qwen3.8-27B-AWQ-FP8 NCCL_P2P_LEVEL=NVL NCCL_P2P_DISABLE=unset ts=2026-09-12T18:09:02Z
+/root/ab-homecheck-180900.log:Using ['CUSTOM', 'PYNCCL'] all-reduce backends
+/root/ab-homecheck-180900.log:GPU KV cache size: 437,170
+/root/kv-probe-off.log:RUN-CONFIG arm=nvl spec=off prefix=off model=cyankiwi/Qwen3.8-27B-AWQ-FP8 NCCL_P2P_LEVEL=NVL NCCL_P2P_DISABLE=unset ts=2026-09-13T03:29:42Z
+/root/kv-probe-off.log:Using ['CUSTOM', 'PYNCCL'] all-reduce backends
+/root/kv-probe-off.log:GPU KV cache size: 437,170
+/root/kv-probe-on.log:RUN-CONFIG arm=nvl spec=off prefix=on model=cyankiwi/Qwen3.8-27B-AWQ-FP8 NCCL_P2P_LEVEL=NVL NCCL_P2P_DISABLE=unset ts=2026-09-13T03:31:47Z
+/root/kv-probe-on.log:Using ['CUSTOM', 'PYNCCL'] all-reduce backends
+/root/kv-probe-on.log:GPU KV cache size: 433,243

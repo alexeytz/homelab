@@ -108,6 +108,11 @@ tcp   LISTEN 0      4096                 *:https             *:*    users:(("xra
 root@us24-04-vless:~/xray#
 ```
 
+#### Check log
+
+```
+cat /var/log/xray/error.log
+```
 
 ## Helper scripts
 
@@ -126,4 +131,19 @@ xray_rm_user.sh - to remove the user.
 xray_uri_user.sh - to print the user's connection URI and QR code.
 ```
 
+## Logrotate
 
+```
+# cat /etc/logrotate.d/xray-access
+/var/log/xray/*.log {
+    daily
+    rotate 7
+    missingok
+    notifempty
+    compress
+    delaycompress
+    copytruncate
+    su root hysteria
+}
+#
+```

@@ -8,6 +8,8 @@ You might want to take some time to explore the full server configuration detail
 
 This setup has been tested and successfully worked on Ubuntu 24.04.
 
+You may want to consider [Blitz](https://github.com/ReturnFI/Blitz)
+
 ## Install Hysteria2
 
 https://v2.hysteria.network/docs/getting-started/Installation/#deployment-script-for-linux-servers

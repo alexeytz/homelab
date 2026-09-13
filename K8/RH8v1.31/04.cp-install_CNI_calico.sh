@@ -32,7 +32,7 @@ metadata:
 spec:
   # Configures Calico networking.
   calicoNetwork:
-    bgp: Enabled  
+    bgp: Enabled
     # Note: The ipPools section cannot be modified post-install.
     ipPools:
     - blockSize: 26
@@ -54,7 +54,7 @@ mv calicoctl /usr/local/bin/
 #sudo mkdir /etc/calico
 #sudo cp /vagrant/calicoctl.cfg /etc/calico/
 mkdir -p /etc/calico
-cat <<EOF | tee /etc/calico/calicoctl.cfg 
+cat <<EOF | tee /etc/calico/calicoctl.cfg
 apiVersion: projectcalico.org/v3
 kind: CalicoAPIConfig
 metadata:

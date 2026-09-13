@@ -1,0 +1,60 @@
+=== host / date ===
+vllm3090
+2026-09-12T17:35:00Z
+6.17.13-21-pve
+
+=== driver / cuda ===
+595.58.03
+Cuda compilation tools, release 13.3, V13.3.73
+Build cuda_13.3.r13.3/compiler.38244171_0
+
+=== gpus ===
+index, name, pci.bus_id, memory.total [MiB]
+0, NVIDIA GeForce RTX 3090, 00000000:05:00.0, 24576 MiB
+1, NVIDIA GeForce RTX 3090, 00000000:18:00.0, 24576 MiB
+2, NVIDIA GeForce RTX 3090, 00000000:5B:00.0, 24576 MiB
+3, NVIDIA GeForce RTX 3090, 00000000:9E:00.0, 24576 MiB
+
+=== topology matrix (NV# = NVLink, PHB/SYS = through host) ===
+	[4mGPU0	GPU1	GPU2	GPU3	CPU Affinity	NUMA Affinity	GPU NUMA ID[0m
+GPU0	 X 	NODE	NODE	NODE	0-5,9-10,12-13	0		N/A
+GPU1	NODE	 X 	NODE	NODE	0-5,9-10,12-13	0		N/A
+GPU2	NODE	NODE	 X 	NV4	0-5,9-10,12-13	0		N/A
+GPU3	NODE	NODE	NV4	 X 	0-5,9-10,12-13	0		N/A
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing at most a single PCIe bridge
+  NV#  = Connection traversing a bonded set of # NVLinks
+
+=== nvlink status, GPUs 2,3 ===
+--- GPU 2 ---
+GPU 2: NVIDIA GeForce RTX 3090 (UUID: GPU-dee43b6b-41cb-380f-abaf-81e284e4f40a)
+	 Link 0: 14.062 GB/s
+	 Link 1: 14.062 GB/s
+	 Link 2: 14.062 GB/s
+	 Link 3: 14.062 GB/s
+--- GPU 3 ---
+GPU 3: NVIDIA GeForce RTX 3090 (UUID: GPU-afb25461-3e12-fac3-5d5e-453ffdf62dd5)
+	 Link 0: 14.062 GB/s
+	 Link 1: 14.062 GB/s
+	 Link 2: 14.062 GB/s
+	 Link 3: 14.062 GB/s
+
+=== P2P capability as the server sees it ===
+  visible devices: 2
+  [0] NVIDIA GeForce RTX 3090
+  [1] NVIDIA GeForce RTX 3090
+  can_device_access_peer(0,1): True
+  peer access available (via NVLink while the bridge is fitted)
+
+=== vllm version ===
+0.27.1
+
+=== does this vllm expose custom all-reduce control? ===
+  flag not found in --help; check startup log for the selected all-reduce path

@@ -1,0 +1,114 @@
+{
+   "customization": {
+      "addr": "forest.chickenkiller.com"
+   },
+   "dns": {
+      "servers": [
+         "tls://1.1.1.1:853",
+         "tls://1.0.0.1:853",
+         "localhost"
+      ]
+   },
+   "log": {
+      "access": "/var/log/xray/access.log",
+      "error": "/var/log/xray/error.log",
+      "loglevel": "warning"
+   },
+   "policy": {
+      "levels": {
+         "0": {
+            "connIdle": 600,
+            "handshake": 4,
+            "uplinkOnly": 4,
+            "downlinkOnly": 10,
+            "bufferSize": 65536
+         }
+      }
+   },
+   "routing": {
+      "domainStrategy": "IPIfNonMatch",
+      "rules": [
+         {
+            "domain": [
+               "geosite:category-ads-all"
+            ],
+            "outboundTag": "block"
+         },
+         {
+            "ip": [
+               "0.0.0.0/0",
+               "::/0"
+            ],
+            "outboundTag": "direct"
+         }
+      ]
+   },
+   "inbounds": [
+      {
+         "port": 443,
+         "protocol": "vless",
+         "settings": {
+            "clients": [
+               {
+                  "email": "pioneer",
+                  "id": "812cc04b-c89e-4758-beed-33b3780c516d",
+                  "flow": "xtls-rprx-vision",
+                  "level": 0
+               }
+            ],
+            "decryption": "none",
+            "fallbacks": [
+               {
+                  "name": "forest.chickenkiller.com",
+                  "dest": "10.69.2.3:8000"
+               },
+               {
+                  "dest": 80
+               }
+            ]
+         },
+         "streamSettings": {
+            "network": "tcp",
+            "security": "tls",
+            "tlsSettings": {
+               "fingerprint": "chrome",
+               "alpn": [
+                  "h2",
+                  "http/1.1"
+               ],
+               "allowInsecure": false,
+               "certificates": [
+                  {
+                     "certificateFile": "/var/lib/hysteria/acme/certificates/acme-v02.api.letsencrypt.org-directory/forest.chickenkiller.com/forest.chickenkiller.com.crt",
+                     "keyFile": "/var/lib/hysteria/acme/certificates/acme-v02.api.letsencrypt.org-directory/forest.chickenkiller.com/forest.chickenkiller.com.key",
+                     "serverName": "forest.chickenkiller.com"
+                  }
+               ]
+            }
+         },
+         "mux": {
+            "enabled": true,
+            "concurrency": 20
+         }
+      },
+      {
+         "port": 9999,
+         "protocol": "dokodemo-door",
+         "settings": {
+            "address": "127.0.0.1",
+            "port": 9999
+         },
+         "tag": "api"
+      }
+   ],
+   "outbounds": [
+      {
+         "protocol": "freedom",
+         "tag": "direct"
+      },
+      {
+         "protocol": "blackhole",
+         "tag": "block"
+      }
+   ]
+}

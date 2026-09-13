@@ -105,7 +105,7 @@ Vagrant.configure("2") do |config|
       server.vm.hostname = node[:hostname]
       case yaml_config["network_type"]
       when "public_network"
-        #leaving below here, just in case. In my tests vagrant (2.4.9) would pick an appropriate adabter based on IP subnet. 
+        #leaving below here, just in case. In my tests vagrant (2.4.9) would pick an appropriate adabter based on IP subnet.
         #server.vm.network :public_network, ip: node[:ip], bridge: yaml_config["network_name"]
         server.vm.network :public_network, ip: node[:ip]
       when "private_network"
@@ -127,7 +127,7 @@ Vagrant.configure("2") do |config|
       # rc-service sshd restart - for alpine Linux.
       server.vm.provision "shell", inline: "systemctl reload sshd||rc-service sshd restart"
       server.vm.provision "shell", inline: "echo -e " + "\"" + yaml_config["root_password"] + "\n" + yaml_config["root_password"] + "\"" + " | passwd root"
-      
+
       # Execute common provisioning commands
       server.vm.provision "shell", inline: all_common_provision_file_content
 
